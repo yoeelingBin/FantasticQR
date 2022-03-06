@@ -1,19 +1,24 @@
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QPixmap
 import os
 from qrlib import qrmodule
 from PIL import Image
 from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
 
+from utils import parameter
+
 ui: QWidget
 
 
+# 初始化
 def modify(_ui: QWidget):
     global ui
     ui = _ui
     set_button()
 
 
+# 设置按钮
 def set_button():
     ui.genqr_button.clicked.connect(gen_qr)
     ui.buttonGroup.buttonClicked.connect(handleButtonClicked)
@@ -57,6 +62,7 @@ def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, sa
     return qr_name
 
 
+# 运行主程序
 def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0, brightness=1.0, save_name=None,
         save_dir=os.getcwd()):
     """
@@ -152,15 +158,25 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
             shutil.rmtree(tempdir)
 
 
+# 生成二维码
 def gen_qr():
-    get_parameter()
-    pass
+    param = get_parameter()
+    print(param.words, param.version, param.level, param.picture, param.colorized,
+          param.contrast, param.brightness, param.name, param.save_dir)
+    version, level, qr_name = run(param.words, param.version, param.level, param.picture, param.colorized,
+                                  param.contrast, param.brightness, param.name, param.save_dir)
+    text: QTextBrowser = ui.info_text
+    show_text = f'Succeed! \n Check out your {str(version)}-{str(level)} QR-code {qr_name}'
+    text.setText(show_text)
+    show_img()
 
 
+# 处理单选按钮响应
 def handleButtonClicked():
     return ui.buttonGroup.checkedButton().text()
 
 
+# 获取参数传递给生成函数
 def get_parameter():
     words = ui.textEdit.toPlainText()
     version = ui.spinBox.value()
@@ -170,5 +186,14 @@ def get_parameter():
     contrast = ui.doubleSpinBox.value()
     brightness = ui.doubleSpinBox_2.value()
     name = None
-    save_dir = None
-    print(version, words, level, picture, colorized, contrast, brightness)
+    save_dir = os.getcwd()
+    return parameter.Parameter(words, version, level, picture, colorized, contrast, brightness, name, save_dir)
+
+
+# 展示二维码预览
+def show_img():
+    pix = QPixmap('E:\Codefield\Python\FantasticQR\qrcode.png')
+    item = QGraphicsPixmapItem(pix)
+    scene = QGraphicsScene(ui)
+    scene.addItem(item)
+    ui.graphicsView.setScene(scene)

@@ -383,7 +383,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTextBrowser" name="textBrowser"/>
+     <widget class="QTextBrowser" name="info_text"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_18">
