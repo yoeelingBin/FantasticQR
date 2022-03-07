@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 import os
+import imageio
 from qrlib import qrmodule
 from PIL import Image
 from qrlib.constant import alig_location
@@ -25,6 +26,7 @@ def modify(_ui: QWidget):
 def set_button():
     ui.genqr_button.clicked.connect(gen_qr)
     ui.clearqr_button.clicked.connect(clear_qr)
+    ui.saveqr_button.clicked.connect(save_qr)
     ui.buttonGroup.buttonClicked.connect(handleButtonClicked)
     ui.radioButton.setChecked(True)
 
@@ -130,8 +132,6 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
         ver, qr_name = qrmodule.get_qrcode(version, level, words, tempdir)
 
         if picture and picture[-4:] == '.gif':
-            import imageio
-
             im = Image.open(picture)
             duration = im.info.get('duration', 0)
             im.save(os.path.join(tempdir, '0.png'))
@@ -186,6 +186,20 @@ def clear_qr():
     ui.textEdit.clear()
     ui.info_text.clear()
     scene.clear()
+
+
+# 保存二维码
+def save_qr():
+    imagepath, _ = QFileDialog.getSaveFileName(
+        ui,  # 父窗口对象
+        "保存二维码",  # 标题
+        "./img/",  # 起始目录
+        "jpg, png, bmp, gif类型 (*.jpg *.png *.bmp *.gif);;All Files (*)"
+    )
+    print(imagepath)
+    if imagepath:
+        img = Image.open('E:\Codefield\Python\FantasticQR\qrcode.png')
+        img.save(imagepath)
 
 
 # 处理单选按钮响应
