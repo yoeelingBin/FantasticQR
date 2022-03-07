@@ -1,12 +1,15 @@
-# -*- coding: utf-8 -*-
-
 from qrlib import data, ECC, structure, matrix, draw
 
 
-# ver: Version from 1 to 40
-# ecl: Error Correction Level (L,M,Q,H)
 # get a qrcode picture of 3*3 pixels per module
 def get_qrcode(ver, ecl, str, save_place):
+    """
+    :param ver: Version from 1 to 40
+    :param ecl: Error Correction Level (L,M,Q,H)
+    :param str: input words
+    :param save_place: save direct
+    :return:
+    """
     # Data Coding
     ver, data_codewords = data.encode(ver, ecl, str)
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from qrlib.constant import char_cap, required_bytes, mindex, lindex, num_list, alphanum_list, grouping_list, \
     mode_indicator
 
@@ -14,27 +12,21 @@ def encode(ver, ecl, str):
     }
 
     ver, mode = analyse(ver, ecl, str)
-
-    print('line 16: mode:', mode)
-
+    # print('line 16: mode:', mode)
     code = mode_indicator[mode] + get_cci(ver, mode, str) + mode_encoding[mode](str)
-
     # Add a Terminator
-    rqbits = 8 * required_bytes[ver - 1][lindex[ecl]]
-    b = rqbits - len(code)
+    qrbits = 8 * required_bytes[ver - 1][lindex[ecl]]
+    b = qrbits - len(code)
     code += '0000' if b >= 4 else '0' * b
-
     # Make the Length a Multiple of 8
     while len(code) % 8 != 0:
         code += '0'
-
     # Add Pad Bytes if the String is Still too Short
-    while len(code) < rqbits:
-        code += '1110110000010001' if rqbits - len(code) >= 16 else '11101100'
+    while len(code) < qrbits:
+        code += '1110110000010001' if qrbits - len(code) >= 16 else '11101100'
 
     data_code = [code[i:i + 8] for i in range(len(code)) if i % 8 == 0]
     data_code = [int(i, 2) for i in data_code]
-
     g = grouping_list[ver - 1][lindex[ecl]]
     data_codewords, i = [], 0
     for n in range(g[0]):
@@ -47,6 +39,7 @@ def encode(ver, ecl, str):
     return ver, data_codewords
 
 
+# 确定数据类型及版本
 def analyse(ver, ecl, str):
     if all(i in num_list for i in str):
         mode = 'numeric'
@@ -65,20 +58,22 @@ def analyse(ver, ecl, str):
     return ver, mode
 
 
+# 数字编码
 def numeric_encoding(str):
     str_list = [str[i:i + 3] for i in range(0, len(str), 3)]
     code = ''
     for i in str_list:
-        rqbin_len = 10
+        qrbin_len = 10
         if len(i) == 1:
-            rqbin_len = 4
+            qrbin_len = 4
         elif len(i) == 2:
-            rqbin_len = 7
+            qrbin_len = 7
         code_temp = bin(int(i))[2:]
-        code += ('0' * (rqbin_len - len(code_temp)) + code_temp)
+        code += ('0' * (qrbin_len - len(code_temp)) + code_temp)
     return code
 
 
+# 字母表编码
 def alphanumeric_encoding(str):
     code_list = [alphanum_list.index(i) for i in str]
     code = ''
@@ -94,6 +89,7 @@ def alphanumeric_encoding(str):
     return code
 
 
+# 字节编码
 def byte_encoding(str):
     code = ''
     for i in str:
@@ -103,6 +99,7 @@ def byte_encoding(str):
     return code
 
 
+# 日文编码
 def kanji_encoding(str):
     pass
 
@@ -121,7 +118,7 @@ def get_cci(ver, mode, str):
     return cci
 
 
-if __name__ == '__main__':
-    s = '123456789'
-    v, datacode = encode(1, 'H', s)
-    print(v, datacode)
+# if __name__ == '__main__':
+#     s = '123456789'
+#     v, datacode = encode(1, 'H', s)
+#     print(v, datacode)

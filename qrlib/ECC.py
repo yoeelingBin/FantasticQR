@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from qrlib.constant import GP_list, ecc_num_per_block, lindex, po2, log
 
 

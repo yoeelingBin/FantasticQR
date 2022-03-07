@@ -5,23 +5,35 @@ from qrlib import qrmodule
 from PIL import Image
 from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
-
 from utils import parameter
 
 ui: QWidget
+scene: QGraphicsScene
 
 
 # 初始化
 def modify(_ui: QWidget):
     global ui
+    global scene
     ui = _ui
+    scene = QGraphicsScene(ui)
     set_button()
+    set_box()
 
 
 # 设置按钮
 def set_button():
     ui.genqr_button.clicked.connect(gen_qr)
+    ui.clearqr_button.clicked.connect(clear_qr)
     ui.buttonGroup.buttonClicked.connect(handleButtonClicked)
+    ui.radioButton.setChecked(True)
+
+
+# 设置数字输入框
+def set_box():
+    ui.spinBox.setValue(1)
+    ui.doubleSpinBox.setValue(1.00)
+    ui.doubleSpinBox_2.setValue(1.00)
 
 
 def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, save_name=None):
@@ -161,14 +173,19 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
 # 生成二维码
 def gen_qr():
     param = get_parameter()
-    print(param.words, param.version, param.level, param.picture, param.colorized,
-          param.contrast, param.brightness, param.name, param.save_dir)
     version, level, qr_name = run(param.words, param.version, param.level, param.picture, param.colorized,
                                   param.contrast, param.brightness, param.name, param.save_dir)
     text: QTextBrowser = ui.info_text
     show_text = f'Succeed! \n Check out your {str(version)}-{str(level)} QR-code {qr_name}'
     text.setText(show_text)
     show_img()
+
+
+# 清除二维码
+def clear_qr():
+    ui.textEdit.clear()
+    ui.info_text.clear()
+    scene.clear()
 
 
 # 处理单选按钮响应
@@ -194,6 +211,5 @@ def get_parameter():
 def show_img():
     pix = QPixmap('E:\Codefield\Python\FantasticQR\qrcode.png')
     item = QGraphicsPixmapItem(pix)
-    scene = QGraphicsScene(ui)
     scene.addItem(item)
     ui.graphicsView.setScene(scene)

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from qrlib.constant import required_remainder_bits, lindex, grouping_list
 
 

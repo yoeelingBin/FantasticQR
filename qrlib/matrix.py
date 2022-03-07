@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
 from qrlib.constant import alig_location, format_info_str, version_info_str, lindex
 
 
+# get qr matrix
 def get_qrmatrix(ver, ecl, bits):
     num = (ver - 1) * 4 + 21
     qrmatrix = [[None] * num for i in range(num)]
@@ -10,24 +9,17 @@ def get_qrmatrix(ver, ecl, bits):
 
     # Add the Finder Patterns & Add the Separators
     add_finder_and_separator(qrmatrix)
-
     # Add the Alignment Patterns
     add_alignment(ver, qrmatrix)
-
     # Add the Timing Patterns
     add_timing(qrmatrix)
-
     # Add the Dark Module and Reserved Areas
     add_dark_and_reserving(ver, qrmatrix)
-
     maskmatrix = [i[:] for i in qrmatrix]
-
     # Place the Data Bits
     place_bits(bits, qrmatrix)
-
     # Data Masking
     mask_num, qrmatrix = mask(maskmatrix, qrmatrix)
-
     # Format Information
     add_format_and_version_string(ver, ecl, mask_num, qrmatrix)
 

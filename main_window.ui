@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
-    <height>623</height>
+    <width>843</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Fantastic QR</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,3,0,2,0">
+   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,3,0,1,0">
     <item>
      <widget class="Line" name="line">
       <property name="orientation">
@@ -140,7 +140,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>选择图片</string>
+                <string>点击选择图片</string>
                </property>
               </widget>
              </item>
@@ -386,7 +386,7 @@
      <widget class="QTextBrowser" name="info_text"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_18">
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
        <widget class="QPushButton" name="genqr_button">
         <property name="sizePolicy">
@@ -405,11 +405,47 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="clearqr_button">
+        <property name="font">
+         <font>
+          <family>苹方 中等</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>清除二维码</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveqr_button">
+        <property name="font">
+         <font>
+          <family>苹方 中等</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>保存二维码</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
