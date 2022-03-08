@@ -38,6 +38,15 @@ def set_box():
     ui.doubleSpinBox_2.setValue(1.00)
 
 
+# 处理单选按钮响应
+def handleButtonClicked():
+    text = ui.buttonGroup.checkedButton().text()
+    if text == "黑":
+        return True
+    else:
+        return False
+
+
 def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, save_name=None):
     qr = Image.open(qr_name)
     qr = qr.convert('RGBA') if colorized else qr
@@ -70,8 +79,7 @@ def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, sa
                             i % 3 == 1 and j % 3 == 1) or (bg0.getpixel((i, j))[3] == 0)):
                 qr.putpixel((i + 12, j + 12), bg.getpixel((i, j)))
 
-    qr_name = os.path.join(save_dir, os.path.splitext(os.path.basename(bg_name))[
-        0] + '_qrcode.png') if not save_name else os.path.join(save_dir, save_name)
+    qr_name = os.path.join(save_dir, 'qrcode.png') if not save_name else os.path.join(save_dir, save_name)
     qr.resize((qr.size[0] * 3, qr.size[1] * 3)).save(qr_name)
     return qr_name
 
@@ -196,15 +204,24 @@ def save_qr():
         "./img/",  # 起始目录
         "jpg, png, bmp, gif类型 (*.jpg *.png *.bmp *.gif);;All Files (*)"
     )
-    print(imagepath)
     if imagepath:
         img = Image.open('E:\Codefield\Python\FantasticQR\qrcode.png')
         img.save(imagepath)
 
 
-# 处理单选按钮响应
-def handleButtonClicked():
-    return ui.buttonGroup.checkedButton().text()
+# 获取图片
+def get_picture():
+    imagepath, _ = QFileDialog.getOpenFileName(
+        ui,  # 父窗口对象
+        "选择背景图片",  # 标题
+        "./bg/",  # 起始目录
+        "jpg, png, bmp, gif类型 (*.jpg *.png *.bmp *.gif);;All Files (*)"
+    )
+    print(imagepath)
+    if imagepath:
+        return imagepath
+    else:
+        return None
 
 
 # 获取参数传递给生成函数
@@ -212,7 +229,7 @@ def get_parameter():
     words = ui.textEdit.toPlainText()
     version = ui.spinBox.value()
     level = ui.comboBox.currentText()
-    picture = None
+    picture = get_picture()
     colorized = handleButtonClicked()
     contrast = ui.doubleSpinBox.value()
     brightness = ui.doubleSpinBox_2.value()

@@ -28,7 +28,7 @@
        <widget class="QWidget" name="select_wrapper" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_14">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout" stretch="1,2,2,2,2,2,2">
+          <layout class="QVBoxLayout" name="verticalLayout" stretch="1,2,2,2,2,2">
            <item>
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
@@ -114,34 +114,6 @@
                  <string>Q</string>
                 </property>
                </item>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QLabel" name="label_4">
-               <property name="font">
-                <font>
-                 <family>苹方 中等</family>
-                </font>
-               </property>
-               <property name="text">
-                <string>背景图片</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_2">
-               <property name="font">
-                <font>
-                 <family>苹方 中等</family>
-                </font>
-               </property>
-               <property name="text">
-                <string>点击选择图片</string>
-               </property>
               </widget>
              </item>
             </layout>
@@ -276,33 +248,13 @@
                  <string/>
                 </property>
                 <attribute name="title">
-                 <string>文本</string>
+                 <string>输入文本或网址</string>
                 </attribute>
                 <layout class="QGridLayout" name="gridLayout">
                  <item row="0" column="0">
                   <widget class="QTextEdit" name="textEdit"/>
                  </item>
                 </layout>
-               </widget>
-               <widget class="QWidget" name="tab_website">
-                <attribute name="title">
-                 <string>网址</string>
-                </attribute>
-                <layout class="QGridLayout" name="gridLayout_3">
-                 <item row="0" column="0">
-                  <widget class="QTextEdit" name="webEdit"/>
-                 </item>
-                </layout>
-               </widget>
-               <widget class="QWidget" name="tab_file">
-                <attribute name="title">
-                 <string>文件</string>
-                </attribute>
-               </widget>
-               <widget class="QWidget" name="tab_img">
-                <attribute name="title">
-                 <string>图片</string>
-                </attribute>
                </widget>
               </widget>
              </item>
