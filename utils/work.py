@@ -191,9 +191,11 @@ def gen_qr():
 
 # 清除二维码
 def clear_qr():
-    ui.textEdit.clear()
-    ui.info_text.clear()
-    scene.clear()
+    reply = QMessageBox.question(ui, '温馨提示', '该操作会清除所有内容!', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+    if reply == QMessageBox.Yes:
+        ui.textEdit.clear()
+        ui.info_text.clear()
+        scene.clear()
 
 
 # 保存二维码
@@ -207,6 +209,9 @@ def save_qr():
     if imagepath:
         img = Image.open('E:\Codefield\Python\FantasticQR\qrcode.png')
         img.save(imagepath)
+        QMessageBox.information(ui, '提示', '保存成功', QMessageBox.Yes)
+    else:
+        QMessageBox.warning(ui, '警告', '请选择文件路径', QMessageBox.Yes)
 
 
 # 获取图片
@@ -217,11 +222,14 @@ def get_picture():
         "./bg/",  # 起始目录
         "jpg, png, bmp, gif类型 (*.jpg *.png *.bmp *.gif);;All Files (*)"
     )
-    print(imagepath)
-    if imagepath:
-        return imagepath
-    else:
-        return None
+    try:
+        if imagepath:
+            QMessageBox.information(ui, '提示', '图片选取成功', QMessageBox.Yes)
+            return imagepath
+        else:
+            return None
+    except Exception:
+        QMessageBox.warning(ui, '警告', '图片读取异常', QMessageBox.Yes)
 
 
 # 获取参数传递给生成函数
