@@ -7,15 +7,19 @@ from PIL import Image
 from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
 from utils import parameter
+import cv2
 
 ui: QWidget
 scene: QGraphicsScene
+showname: str
 
 
 # 初始化
 def modify(_ui: QWidget):
     global ui
     global scene
+    global showname
+    showname = ''
     ui = _ui
     scene = QGraphicsScene(ui)
     set_button()
@@ -79,7 +83,8 @@ def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, sa
                             i % 3 == 1 and j % 3 == 1) or (bg0.getpixel((i, j))[3] == 0)):
                 qr.putpixel((i + 12, j + 12), bg.getpixel((i, j)))
 
-    qr_name = os.path.join(save_dir, 'qrcode.png') if not save_name else os.path.join(save_dir, save_name)
+    qr_name = os.path.join(save_dir, os.path.splitext(os.path.basename(bg_name))[0] + '_qrcode.png') if not save_name \
+        else os.path.join(save_dir, save_name)
     qr.resize((qr.size[0] * 3, qr.size[1] * 3)).save(qr_name)
     return qr_name
 
@@ -207,8 +212,12 @@ def save_qr():
         "jpg, png, bmp, gif类型 (*.jpg *.png *.bmp *.gif);;All Files (*)"
     )
     if imagepath:
-        img = Image.open('E:\Codefield\Python\FantasticQR\qrcode.png')
-        img.save(imagepath)
+        if imagepath[-4:] == '.jpg':
+            img = cv2.imread(showname)
+            cv2.imwrite(imagepath, img)
+        else:
+            img = Image.open(showname)
+            img.save(imagepath)
         QMessageBox.information(ui, '提示', '保存成功', QMessageBox.Yes)
     else:
         QMessageBox.warning(ui, '警告', '请选择文件路径', QMessageBox.Yes)
@@ -216,6 +225,7 @@ def save_qr():
 
 # 获取图片
 def get_picture():
+    global showname
     imagepath, _ = QFileDialog.getOpenFileName(
         ui,  # 父窗口对象
         "选择背景图片",  # 标题
@@ -225,8 +235,11 @@ def get_picture():
     try:
         if imagepath:
             QMessageBox.information(ui, '提示', '图片选取成功', QMessageBox.Yes)
+            if imagepath[-4:] == '.jpg':
+                showname = os.path.join(os.getcwd(), os.path.splitext(os.path.basename(imagepath))[0] + '_qrcode.png')
             return imagepath
         else:
+            showname = os.path.join(os.getcwd(), 'qrcode.png')
             return None
     except Exception:
         QMessageBox.warning(ui, '警告', '图片读取异常', QMessageBox.Yes)
@@ -248,7 +261,7 @@ def get_parameter():
 
 # 展示二维码预览
 def show_img():
-    pix = QPixmap('E:\Codefield\Python\FantasticQR\qrcode.png')
+    pix = QPixmap(showname)
     item = QGraphicsPixmapItem(pix)
     scene.addItem(item)
     ui.graphicsView.setScene(scene)
