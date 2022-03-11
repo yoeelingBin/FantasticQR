@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPixmap
 import os
 import imageio
 from qrlib import qrmodule
-from PIL import Image
+from PIL import Image, ImageSequence
 from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
 from utils import parameter
@@ -185,12 +185,16 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
 
 # 生成二维码
 def gen_qr():
+    text: QTextBrowser = ui.info_text
     param = get_parameter()
+    if param.picture[-4:] == '.gif':
+        gif_text = f'Generating qr gif, please waiting for some seconds...\n'
+        text.setText(gif_text)
     version, level, qr_name = run(param.words, param.version, param.level, param.picture, param.colorized,
                                   param.contrast, param.brightness, param.name, param.save_dir)
-    text: QTextBrowser = ui.info_text
+
     show_text = f'Succeed! \n Check out your {str(version)}-{str(level)} QR-code {qr_name}'
-    text.setText(show_text)
+    text.append(show_text)
     show_img()
 
 
@@ -215,6 +219,23 @@ def save_qr():
         if imagepath[-4:] == '.jpg':
             img = cv2.imread(showname)
             cv2.imwrite(imagepath, img)
+        elif imagepath[-4:] == '.gif':
+            im = Image.open(showname)
+            duration = im.info.get('duration', 0)
+            tmpdir = "E:\Codefield\Python\FantasticQR\tmp"
+            im.save(os.path.join(tmpdir, 'frame0.png'))
+            while True:
+                try:
+                    seq = im.tell()
+                    im.seek(seq + 1)
+                    im.save(os.path.join(tmpdir, 'frame%s.png' % (seq + 1)))
+                except EOFError:
+                    break
+            imgname = []
+            for s in range(seq + 1):
+                imgname.append(showname)
+            ims = [imageio.imread(pic) for pic in imgname]
+            imageio.mimwrite(imagepath, ims, '.gif', **{'duration': duration / 1000})
         else:
             img = Image.open(showname)
             img.save(imagepath)
@@ -237,6 +258,8 @@ def get_picture():
             QMessageBox.information(ui, '提示', '图片选取成功', QMessageBox.Yes)
             if imagepath[-4:] == '.jpg':
                 showname = os.path.join(os.getcwd(), os.path.splitext(os.path.basename(imagepath))[0] + '_qrcode.png')
+            elif imagepath[-4:] == '.gif':
+                showname = os.path.join(os.getcwd(), os.path.splitext(os.path.basename(imagepath))[0] + '_qrcode.gif')
             return imagepath
         else:
             showname = os.path.join(os.getcwd(), 'qrcode.png')

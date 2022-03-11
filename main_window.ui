@@ -248,7 +248,7 @@
                  <string/>
                 </property>
                 <attribute name="title">
-                 <string>输入文本或网址</string>
+                 <string>请输入文本或网址</string>
                 </attribute>
                 <layout class="QGridLayout" name="gridLayout">
                  <item row="0" column="0">
