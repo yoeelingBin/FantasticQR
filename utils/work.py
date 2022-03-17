@@ -106,38 +106,7 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
     :param save_dir: str, the output directory
     :return:
     """
-    supported_chars = r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ··,.:;+-*/\~!@#$%^&`'=<>[](" \
-                      r")?_{}| "
-
-    # check every parameter
-    if not isinstance(words, str) or any(i not in supported_chars for i in words):
-        raise ValueError('Wrong words! Make sure the characters are supported!')
-    if not isinstance(version, int) or version not in range(1, 41):
-        raise ValueError('Wrong version! Please choose a int-type value from 1 to 40!')
-    if not isinstance(level, str) or len(level) > 1 or level not in 'LMQH':
-        raise ValueError("Wrong level! Please choose a str-type level from {'L','M','Q','H'}!")
-    if picture:
-        if not isinstance(picture, str) or not os.path.isfile(picture) or picture[-4:] not in (
-                '.jpg', '.png', '.bmp', '.gif'):
-            raise ValueError(
-                "Wrong picture! Input a filename that exists and be tailed with one of {'.jpg', '.png', '.bmp', "
-                "'.gif'}!")
-        if picture[-4:] == '.gif' and save_name and save_name[-4:] != '.gif':
-            raise ValueError(
-                'Wrong save_name! If the picuter is .gif format, the output filename should be .gif format, too!')
-        if not isinstance(colorized, bool):
-            raise ValueError('Wrong colorized! Input a bool-type value!')
-        if not isinstance(contrast, float):
-            raise ValueError('Wrong contrast! Input a float-type value!')
-        if not isinstance(brightness, float):
-            raise ValueError('Wrong brightness! Input a float-type value!')
-    if save_name and (not isinstance(save_name, str) or save_name[-4:] not in ('.jpg', '.png', '.bmp', '.gif')):
-        raise ValueError("Wrong save_name! Input a filename tailed with one of {'.jpg', '.png', '.bmp', '.gif'}!")
-    if not os.path.isdir(save_dir):
-        raise ValueError('Wrong save_dir! Input a existing-directory!')
-
     tempdir = os.path.join(os.path.expanduser('~'), '.myqr')
-
     try:
         if not os.path.exists(tempdir):
             os.makedirs(tempdir)
@@ -183,10 +152,46 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
             shutil.rmtree(tempdir)
 
 
+# 检查输入参数
+def check(words, version, picture, save_name, save_dir):
+    supported_chars = r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ··,.:;+-*/\~!@#$%^&`'=<>[](" \
+                      r")?_{}| "
+
+    # check every parameter
+    if not isinstance(words, str) or any(i not in supported_chars for i in words):
+        QMessageBox.critical(ui, '错误', '错误字符！', QMessageBox.Yes)
+        raise ValueError('Wrong words! Make sure the characters are supported!')
+    if not isinstance(version, int) or version not in range(1, 41):
+        QMessageBox.critical(ui, '错误', '错误版本！请输入正确的版本号！（1-40）', QMessageBox.Yes)
+        raise ValueError('Wrong version! Please choose a int-type value from 1 to 40!')
+    if picture:
+        if not isinstance(picture, str) or not os.path.isfile(picture) or picture[-4:] not in (
+                '.jpg', '.png', '.bmp', '.gif'):
+            QMessageBox.critical(ui, '错误', '错误图片！请输入正确的图片格式！', QMessageBox.Yes)
+            raise ValueError(
+                "Wrong picture! Input a filename that exists and be tailed with one of {'.jpg', '.png', '.bmp', "
+                "'.gif'}!")
+        if picture[-4:] == '.gif' and save_name and save_name[-4:] != '.gif':
+            QMessageBox.critical(ui, '错误', '错误保存路径！后缀应为.gif！', QMessageBox.Yes)
+            raise ValueError(
+                'Wrong save_name! If the picture is .gif format, the output filename should be .gif format, too!')
+    if save_name and (not isinstance(save_name, str) or save_name[-4:] not in ('.jpg', '.png', '.bmp', '.gif')):
+        QMessageBox.critical(ui, '错误', '错误保存名字！请选择为图片格式！', QMessageBox.Yes)
+        raise ValueError("Wrong save_name! Input a filename tailed with one of {'.jpg', '.png', '.bmp', '.gif'}!")
+    if not os.path.isdir(save_dir):
+        QMessageBox.critical(ui, '错误', '错误保存目录！请选择已存在的目录！', QMessageBox.Yes)
+        raise ValueError('Wrong save_dir! Input a existing-directory!')
+
+
 # 生成二维码
 def gen_qr():
     text: QTextBrowser = ui.info_text
     param = get_parameter()
+    try:
+        check(param.words, param.version, param.picture, param.name, param.save_dir)
+    except ValueError:
+        ui.textEdit.clear()
+        param = get_parameter()
     if param.picture:
         if param.picture[-4:] == '.gif':
             gif_text = f'Generating qr gif, please waiting for some seconds...\n'
