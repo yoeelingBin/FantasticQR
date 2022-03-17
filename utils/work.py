@@ -187,9 +187,10 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
 def gen_qr():
     text: QTextBrowser = ui.info_text
     param = get_parameter()
-    if param.picture[-4:] == '.gif':
-        gif_text = f'Generating qr gif, please waiting for some seconds...\n'
-        text.setText(gif_text)
+    if param.picture:
+        if param.picture[-4:] == '.gif':
+            gif_text = f'Generating qr gif, please waiting for some seconds...\n'
+            text.setText(gif_text)
     version, level, qr_name = run(param.words, param.version, param.level, param.picture, param.colorized,
                                   param.contrast, param.brightness, param.name, param.save_dir)
 
