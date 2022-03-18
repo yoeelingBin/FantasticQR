@@ -8,6 +8,7 @@ from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
 from utils import parameter
 import cv2
+import shutil
 
 ui: QWidget
 scene: QGraphicsScene
@@ -54,7 +55,6 @@ def handleButtonClicked():
 def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, save_name=None):
     qr = Image.open(qr_name)
     qr = qr.convert('RGBA') if colorized else qr
-
     bg0 = Image.open(bg_name).convert('RGBA')
     bg0 = ImageEnhance.Contrast(bg0).enhance(contrast)
     bg0 = ImageEnhance.Brightness(bg0).enhance(brightness)
@@ -143,11 +143,7 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
             qr.resize((qr.size[0] * 3, qr.size[1] * 3)).save(qr_name)
 
         return ver, level, qr_name
-
-    except:
-        raise
     finally:
-        import shutil
         if os.path.exists(tempdir):
             shutil.rmtree(tempdir)
 
@@ -191,6 +187,8 @@ def gen_qr():
         check(param.words, param.version, param.picture, param.name, param.save_dir)
     except ValueError:
         ui.textEdit.clear()
+        ui.info_text.clear()
+        scene.clear()
         param = get_parameter()
     if param.picture:
         if param.picture[-4:] == '.gif':
