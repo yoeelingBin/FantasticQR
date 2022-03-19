@@ -1,17 +1,45 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap, QMovie
 import os
-import imageio
-from qrlib import qrmodule
-from PIL import Image, ImageSequence
-from qrlib.constant import alig_location
-from PIL import ImageEnhance, ImageFilter
-from utils import parameter
+
 import cv2
+import imageio
 import shutil
+from PIL import Image, ImageSequence
+from PIL import ImageEnhance
+from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtGui import QPixmap, QMovie
+from PyQt5.QtWidgets import *
+
+from qrlib import qrmodule
+from qrlib.constant import alig_location
+from utils import parameter
 
 ui: QWidget
 showname: str
+
+
+class WorkThread(QThread):
+    trigger = pyqtSignal(str)
+
+    def __init__(self, words, version, level, picture, colorized, contrast, brightness, save_name, save_dir):
+        self.qr_name = ''
+        self.words = words
+        self.version = version
+        self.level = level
+        self.picture = picture
+        self.colorized = colorized
+        self.contrast = contrast
+        self.brightness = brightness
+        self.name = save_name
+        self.save_dir = save_dir
+        super(WorkThread, self).__init__()
+
+    def __del__(self):
+        self.quit()
+        self.wait()
+
+    def run(self):
+        self.version, self.level, self.qr_name = run(self.words, self.version, self.level, self.picture, self.colorized,
+                                                     self.contrast, self.brightness, self.name, self.save_dir)
 
 
 # 初始化
@@ -196,7 +224,7 @@ def gen_qr():
     except ValueError:
         ui.textEdit.clear()
         ui.info_text.clear()
-        scene.clear()
+        ui.movie_screen.clear()
         param = get_parameter()
     if param.picture:
         if param.picture[-4:] == '.gif':
