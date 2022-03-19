@@ -220,9 +220,9 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_16">
+       <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="1,3,1">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_15">
+         <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0,0">
           <item>
            <widget class="Line" name="line_2">
             <property name="orientation">
@@ -283,42 +283,20 @@
             <family>苹方 中等</family>
            </font>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="2" column="0">
-            <widget class="QGraphicsView" name="graphicsView">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>10</horstretch>
-               <verstretch>10</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>100</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;此处显示二维码&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,7">
+           <item>
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>预览二维码</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <property name="topMargin">
-              <number>3</number>
+           <item>
+            <widget class="QLabel" name="movie_screen">
+             <property name="text">
+              <string/>
              </property>
-             <property name="bottomMargin">
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_15">
-               <property name="text">
-                <string>预览二维码</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            </widget>
            </item>
           </layout>
          </widget>

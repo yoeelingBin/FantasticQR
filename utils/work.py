@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QMovie
 import os
 import imageio
 from qrlib import qrmodule
@@ -7,19 +7,16 @@ from PIL import Image, ImageSequence
 from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
 from utils import parameter
-import numpy as np
 import cv2
 import shutil
 
 ui: QWidget
-scene: QGraphicsScene
 showname: str
 
 
 # 初始化
 def modify(_ui: QWidget):
     global ui
-    global scene
     global showname
     showname = ''
     ui = _ui
@@ -219,7 +216,7 @@ def clear_qr():
     if reply == QMessageBox.Yes:
         ui.textEdit.clear()
         ui.info_text.clear()
-        scene.clear()
+        ui.movie_screen.clear()
 
 
 # 保存二维码
@@ -292,7 +289,13 @@ def get_parameter():
 
 # 展示二维码预览
 def show_img():
-    pix = QPixmap(showname)
-    item = QGraphicsPixmapItem(pix)
-    scene.addItem(item)
-    ui.graphicsView.setScene(scene)
+    if showname[-4:] == '.png':
+        pix = QPixmap(showname)
+        ui.movie_screen.setPixmap(pix)
+        ui.movie_screen.setScaledContents(True)
+    elif showname[-4:] == '.gif':
+        movie = QMovie(showname)
+        movie.setCacheMode(QMovie.CacheAll)
+        movie.setSpeed(100)
+        ui.movie_screen.setMovie(movie)
+        movie.start()
