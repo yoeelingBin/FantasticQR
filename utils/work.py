@@ -7,6 +7,7 @@ from PIL import Image, ImageSequence
 from qrlib.constant import alig_location
 from PIL import ImageEnhance, ImageFilter
 from utils import parameter
+import numpy as np
 import cv2
 import shutil
 
@@ -179,6 +180,16 @@ def check(words, version, picture, save_name, save_dir):
         raise ValueError('Wrong save_dir! Input a existing-directory!')
 
 
+def del_files(path_file):
+    ls = os.listdir(path_file)
+    for i in ls:
+        f_path = os.path.join(path_file, i)
+        if os.path.isdir(f_path):
+            del_files(f_path)
+        else:
+            os.remove(f_path)
+
+
 # 生成二维码
 def gen_qr():
     text: QTextBrowser = ui.info_text
@@ -217,7 +228,7 @@ def save_qr():
         ui,  # 父窗口对象
         "保存二维码",  # 标题
         "./img/",  # 起始目录
-        "jpg, png, bmp, gif类型 (*.jpg *.png *.bmp *.gif);;All Files (*)"
+        "jpg, png, bmp类型 (*.jpg *.png *.bmp);;gif (*.gif);;All Files (*)"
     )
     if imagepath:
         if imagepath[-4:] == '.jpg':
@@ -225,21 +236,14 @@ def save_qr():
             cv2.imwrite(imagepath, img)
         elif imagepath[-4:] == '.gif':
             im = Image.open(showname)
-            duration = im.info.get('duration', 0)
-            tmpdir = "E:\Codefield\Python\FantasticQR\tmp"
-            im.save(os.path.join(tmpdir, 'frame0.png'))
-            while True:
-                try:
-                    seq = im.tell()
-                    im.seek(seq + 1)
-                    im.save(os.path.join(tmpdir, 'frame%s.png' % (seq + 1)))
-                except EOFError:
-                    break
-            imgname = []
-            for s in range(seq + 1):
-                imgname.append(showname)
-            ims = [imageio.imread(pic) for pic in imgname]
-            imageio.mimwrite(imagepath, ims, '.gif', **{'duration': duration / 1000})
+            iter = ImageSequence.Iterator(im)
+            index = 1
+            for frame in iter:
+                frame.save("./tmp/frame%d.png" % index)
+                index += 1
+            imgs = [frame.copy() for frame in ImageSequence.Iterator(im)]
+            imgs[0].save(imagepath, save_all=True, append_images=imgs[1:])
+            del_files("./tmp")
         else:
             img = Image.open(showname)
             img.save(imagepath)
