@@ -47,7 +47,7 @@ char_cap = {
           (2735, 1658, 1139, 701), (2927, 1774, 1219, 750), (3057, 1852, 1273, 784)]
 }
 
-mindex = {'numeric': 0, 'alphanumeric': 1, 'byte': 2, 'kanji': 3}
+mindex = {'numeric': 0, 'alphanumeric': 1, 'byte': 2, 'zhcn': 3}
 
 # [
 # version1[level1,level2,level3,level4], 
@@ -122,7 +122,7 @@ grouping_list = [
     [(19, 118, 6, 119), (18, 47, 31, 48), (34, 24, 34, 25), (20, 15, 61, 16)]
 ]
 
-mode_indicator = {'numeric': '0001', 'alphanumeric': '0010', 'byte': '0100', 'kanji': '1000'}
+mode_indicator = {'numeric': '0001', 'alphanumeric': '0010', 'byte': '0100', 'zhcn': '1000'}
 
 """
 ******  for ECC.py  *******

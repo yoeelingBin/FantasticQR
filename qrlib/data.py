@@ -8,7 +8,7 @@ def encode(ver, ecl, str):
         'numeric': numeric_encoding,
         'alphanumeric': alphanumeric_encoding,
         'byte': byte_encoding,
-        'kanji': kanji_encoding
+        'zhcn': zhcn_encoding
     }
 
     ver, mode = analyse(ver, ecl, str)
@@ -99,9 +99,14 @@ def byte_encoding(str):
     return code
 
 
-# 日文编码
-def kanji_encoding(str):
-    pass
+# 中文编码
+def zhcn_encoding(str):
+    code = ''
+    for i in str:
+        c = bin(ord(i.encode('utf-8')))
+        c = '0' * (13- len(c)) + c
+        code += c
+    return code
 
 
 # cci: character count indicator  

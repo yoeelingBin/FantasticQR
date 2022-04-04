@@ -14,6 +14,10 @@ class Loader:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
+    # logo
+    icon = QIcon('./img/logo.png')
+    app.setWindowIcon(icon)
+
     # 显示窗口
     loader = Loader()
     loader.ui.show()
