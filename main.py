@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
+from qt_material import apply_stylesheet
 import sys
 import utils.work
 
@@ -17,6 +18,9 @@ if __name__ == '__main__':
     # logo
     icon = QIcon('./img/logo.png')
     app.setWindowIcon(icon)
+
+    # theme
+    apply_stylesheet(app, theme='light_blue.xml', invert_secondary=True)
 
     # 显示窗口
     loader = Loader()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>843</width>
-    <height>540</height>
+    <width>817</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,6 +41,9 @@
               <font>
                <family>苹方 中等</family>
                <pointsize>18</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
               </font>
              </property>
              <property name="text">
@@ -327,7 +330,7 @@
         </property>
         <property name="font">
          <font>
-          <family>苹方 中等</family>
+          <family>微软雅黑</family>
          </font>
         </property>
         <property name="text">
