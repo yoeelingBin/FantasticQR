@@ -72,7 +72,7 @@ def set_box():
 # 处理单选按钮响应
 def handleButtonClicked():
     text = ui.buttonGroup.checkedButton().text()
-    if text == "黑":
+    if text == "彩色":
         return True
     else:
         return False

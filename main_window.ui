@@ -143,7 +143,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>黑</string>
+                <string>彩色</string>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
@@ -158,7 +158,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>白</string>
+                <string>黑白</string>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
